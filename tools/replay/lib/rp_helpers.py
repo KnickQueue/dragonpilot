@@ -33,8 +33,8 @@ def draw_path(path, lid_overlay, lid_color=None):
   x, y = np.asarray(path.x), np.asarray(path.y)
   # draw lidar path point on lidar
   if lid_color is not None and lid_overlay is not None:
-    for i in range(len(x)):
-      px, py = to_topdown_pt(x[i], y[i])
+    for xi, yi in zip(x, y, strict=True):
+      px, py = to_topdown_pt(xi, yi)
       if px != -1:
         lid_overlay[px, py] = lid_color
 

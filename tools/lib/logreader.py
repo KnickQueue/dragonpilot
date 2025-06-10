@@ -294,7 +294,7 @@ class LogReader:
     return self.__lrs[i]
 
   def __iter__(self):
-    for i in range(len(self.logreader_identifiers)):
+    for i, _ in enumerate(self.logreader_identifiers):
       yield from self._get_lr(i)
 
   def _run_on_segment(self, func, i):
