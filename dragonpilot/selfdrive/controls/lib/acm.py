@@ -69,8 +69,8 @@ class ACM:
       return a_desired_trajectory
 
     # Suppress all braking to allow smooth coasting
-    for i in range(len(a_desired_trajectory)):
-      if a_desired_trajectory[i] < 0 and a_desired_trajectory[i] > self.allowed_brake_val:
+    for i, val in enumerate(a_desired_trajectory):
+      if val < 0 and val > self.allowed_brake_val:
         a_desired_trajectory[i] = 0.0
     return a_desired_trajectory
 

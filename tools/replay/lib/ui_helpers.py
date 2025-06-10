@@ -78,8 +78,8 @@ def draw_path(path, color, img, calibration, top_down, lid_color=None, z_off=0):
   # find color in 8 bit
   if lid_color is not None and top_down is not None:
     tcolor = find_color(top_down[0], lid_color)
-    for i in range(len(x)):
-      px, py = to_topdown_pt(x[i], y[i])
+    for xi, yi in zip(x, y, strict=True):
+      px, py = to_topdown_pt(xi, yi)
       if px != -1:
         top_down[1][px, py] = tcolor
 
@@ -106,10 +106,10 @@ def init_plots(arr, name_to_arr_idx, plot_xlims, plot_ylims, plot_names, plot_co
   fig.set_facecolor((0.2, 0.2, 0.2))
 
   axs = []
-  for pn in range(len(plot_ylims)):
-    ax = fig.add_subplot(len(plot_ylims), 1, len(axs)+1)
-    ax.set_xlim(plot_xlims[pn][0], plot_xlims[pn][1])
-    ax.set_ylim(plot_ylims[pn][0], plot_ylims[pn][1])
+  for pn, (xlim, ylim) in enumerate(zip(plot_xlims, plot_ylims, strict=True)):
+    ax = fig.add_subplot(len(plot_ylims), 1, pn + 1)
+    ax.set_xlim(*xlim)
+    ax.set_ylim(*ylim)
     ax.patch.set_facecolor((0.4, 0.4, 0.4))
     axs.append(ax)
 
@@ -137,9 +137,9 @@ def init_plots(arr, name_to_arr_idx, plot_xlims, plot_ylims, plot_names, plot_co
   def draw_plots(arr):
     for ax in axs:
       ax.draw_artist(ax.patch)
-    for i in range(len(plots)):
-      plots[i].set_ydata(arr[:, idxs[i]])
-      axs[plot_select[i]].draw_artist(plots[i])
+    for plot, idx, select in zip(plots, idxs, plot_select, strict=True):
+      plot.set_ydata(arr[:, idx])
+      axs[select].draw_artist(plot)
 
     raw_data = canvas.buffer_rgba()
     plot_surface = pygame.image.frombuffer(raw_data, canvas.get_width_height(), "RGBA").convert()
